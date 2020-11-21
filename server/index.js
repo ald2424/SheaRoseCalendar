@@ -14,7 +14,7 @@ app.use(cors());
     //any route that goes to api/posts will be directed to posts.js file
 app.use('/api/posts', posts);
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server started on port ${port}`));
 
 
