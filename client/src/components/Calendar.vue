@@ -3,7 +3,7 @@
     <v-col>
       <v-sheet height="64">
         <v-toolbar flat color="white">
-          <v-btn color="primary" dark @click.stop="dialog = true">
+          <v-btn color="red darken-2" dark @click.stop="dialog = true">
             New Event
           </v-btn>
           <v-btn outlined class="mr-4" @click="setToday">
@@ -48,10 +48,10 @@
             <v-form @submit.prevent="addEvent">
               <v-text-field v-model="name" type="text" label="event name (required)"></v-text-field>
               <v-text-field v-model="details" type="text" label="detail"></v-text-field>
-              <v-text-field v-model="start" type="date" label="start (required)"></v-text-field>
-              <v-text-field v-model="end" type="date" label="end (required)"></v-text-field>
+              <v-text-field v-model="start" type="time" label="start (required)"></v-text-field>
+              <v-text-field v-model="end" type="time" label="end (required)"></v-text-field>
               <v-text-field v-model="color" type="color" label="color (click to open color menu)"></v-text-field>
-              <v-btn type="submit" color="primary" class="mr-4" @click.stop="dialog = false">
+              <v-btn type="submit" color="red darken-2" class="mr-4" @click.stop="dialog = false">
                 create event
               </v-btn>
             </v-form>
@@ -65,10 +65,10 @@
             <v-form @submit.prevent="addEvent">
               <v-text-field v-model="name" type="text" label="event name (required)"></v-text-field>
               <v-text-field v-model="details" type="text" label="detail"></v-text-field>
-              <v-text-field v-model="start" type="date" label="start (required)"></v-text-field>
-              <v-text-field v-model="end" type="date" label="end (required)"></v-text-field>
+              <v-text-field v-model="start" type="time" label="start (required)"></v-text-field>
+              <v-text-field v-model="end" type="time" label="end (required)"></v-text-field>
               <v-text-field v-model="color" type="color" label="color (click to open color menu)"></v-text-field>
-              <v-btn type="submit" color="primary" class="mr-4" @click.stop="dialog = false">
+              <v-btn type="submit" color="red darken-2" class="mr-4" @click.stop="dialog = false">
                 create event
               </v-btn>
             </v-form>
@@ -80,7 +80,7 @@
   <v-calendar
   ref="calendar"
   v-model="focus"
-  color="primary"
+  color="red darken-2"
   :events="events"
   :event-color="getEventColor"
   :event-margin-bottom="3"
@@ -287,6 +287,14 @@ export default {
       return d > 3 && d < 21
       ? 'th'
       : ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'][d % 10]
+    }
+  },
+  watch:{
+    end(){
+      if(this.end < this.start){
+        alert('Invalid start and end times. Make sure that the end time is later than the start time.')
+        this.end = null
+      }
     }
   }
 }
