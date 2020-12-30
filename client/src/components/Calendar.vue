@@ -46,7 +46,8 @@
         <v-card>
           <v-container>
             <v-form @submit.prevent="addEvent">
-              <v-text-field v-model="name" type="text" label="event name (required)"></v-text-field>
+              <v-text-field v-model="name" type="text" label="Name (required)"></v-text-field>
+              <v-select :items="types" label="type (required)"></v-select>
               <v-text-field v-model="details" type="text" label="detail"></v-text-field>
               <v-text-field v-model="start" type="time" label="start (required)"></v-text-field>
               <v-text-field v-model="end" type="time" label="end (required)"></v-text-field>
@@ -64,6 +65,7 @@
           <v-container>
             <v-form @submit.prevent="addEvent">
               <v-text-field v-model="name" type="text" label="event name (required)"></v-text-field>
+              <v-select :items="types" label="type (required)"></v-select>
               <v-text-field v-model="details" type="text" label="detail"></v-text-field>
               <v-text-field v-model="start" type="time" label="start (required)"></v-text-field>
               <v-text-field v-model="end" type="time" label="end (required)"></v-text-field>
@@ -164,7 +166,8 @@ export default {
     selectedOpen: false,
     events: [],
     dialog: false,
-    dialogDate: false
+    dialogDate: false,
+    types: ['Group', 'Private', 'Semi-private', 'Birthday party', 'Trail ride', 'Off-premise event']
   }),
   mounted () {
     this.getEvents()
@@ -235,6 +238,7 @@ export default {
       if (this.name && this.start && this.end) {
         await db.collection("calEvent").add({
           name: this.name,
+          types: this.type,
           details: this.details,
           start: this.start,
           end: this.end,
@@ -242,6 +246,7 @@ export default {
         })
         this.getEvents()
         this.name = '',
+        this.type = '',
         this.details = '',
         this.start = '',
         this.end = '',
@@ -291,10 +296,13 @@ export default {
   },
   watch:{
     end(){
-      if(this.end < this.start){
+      const that = this
+      setTimeout(function(){
+      if(that.end < that.start){
         alert('Invalid start and end times. Make sure that the end time is later than the start time.')
-        this.end = null
+        that.end = null
       }
+      }, 4000)
     }
   }
 }
