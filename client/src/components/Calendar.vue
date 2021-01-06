@@ -51,7 +51,6 @@
               <v-text-field v-model="details" type="text" label="detail"></v-text-field>
               <v-text-field v-model="start" type="time" label="start (required)"></v-text-field>
               <v-text-field v-model="end" type="time" label="end (required)"></v-text-field>
-              <v-text-field v-model="color" type="color" label="color (click to open color menu)"></v-text-field>
               <v-btn type="submit" color="red darken-2" class="mr-4" @click.stop="dialog = false">
                 create event
               </v-btn>
@@ -69,7 +68,6 @@
               <v-text-field v-model="details" type="text" label="detail"></v-text-field>
               <v-text-field v-model="start" type="time" label="start (required)"></v-text-field>
               <v-text-field v-model="end" type="time" label="end (required)"></v-text-field>
-              <v-text-field v-model="color" type="color" label="color (click to open color menu)"></v-text-field>
               <v-btn type="submit" color="red darken-2" class="mr-4" @click.stop="dialog = false">
                 create event
               </v-btn>
@@ -84,7 +82,6 @@
   v-model="focus"
   color="red darken-2"
   :events="events"
-  :event-color="getEventColor"
   :event-margin-bottom="3"
   :now="today"
   :type="type"
@@ -159,7 +156,7 @@ export default {
     details: null,
     start: null,
     end: null,
-    color: '#1976D2', // default event color
+    //color: '#1976D2', // default event color
     currentlyEditing: null,
     selectedEvent: {},
     selectedElement: null,
@@ -222,9 +219,6 @@ export default {
       this.focus = date
       this.type = 'day'
     },
-    getEventColor (event) {
-      return event.color
-    },
     setToday () {
       this.focus = this.today
     },
@@ -236,21 +230,26 @@ export default {
     },
     async addEvent () {
       if (this.name && this.start && this.end) {
-        await db.collection("calEvent").add({
-          name: this.name,
-          types: this.type,
-          details: this.details,
-          start: this.start,
-          end: this.end,
-          color: this.color
-        })
+        // await db.collection("calEvent").add({
+        //   name: this.name,
+        //   types: this.type,
+        //   details: this.details,
+        //   start: this.start,
+        //   end: this.end,
+        //   color: this.color
+        console.log(`name: ${this.name},
+          types: ${this.type},
+          details: ${this.details},
+          start: ${this.start},
+          end: ${this.end},
+          date: ${this.focus}`)        
+        //)
         this.getEvents()
         this.name = '',
         this.type = '',
         this.details = '',
         this.start = '',
-        this.end = '',
-        this.color = ''
+        this.end = ''
       } else {
         alert('You must enter event name, start, and end time')
       }
