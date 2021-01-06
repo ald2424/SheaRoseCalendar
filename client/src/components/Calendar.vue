@@ -46,7 +46,7 @@
         <v-card>
           <v-container>
             <v-form @submit.prevent="addEvent">
-              <v-text-field v-model="name" type="text" label="Name (required)"></v-text-field>
+              <v-text-field v-model="eventName" type="text" label="Name (required)"></v-text-field>
               <v-select :items="types" label="type (required)"></v-select>
               <v-text-field v-model="details" type="text" label="detail"></v-text-field>
               <v-text-field v-model="start" type="time" label="start (required)"></v-text-field>
@@ -63,7 +63,7 @@
         <v-card>
           <v-container>
             <v-form @submit.prevent="addEvent">
-              <v-text-field v-model="name" type="text" label="event name (required)"></v-text-field>
+              <v-text-field v-model="eventName" type="text" label="event name (required)"></v-text-field>
               <v-select :items="types" label="type (required)"></v-select>
               <v-text-field v-model="details" type="text" label="detail"></v-text-field>
               <v-text-field v-model="start" type="time" label="start (required)"></v-text-field>
@@ -102,7 +102,7 @@
       <v-btn @click="deleteEvent(selectedEvent.id)" icon>
         <v-icon>mdi-delete</v-icon>
       </v-btn>
-      <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+      <v-toolbar-title v-html="selectedEvent.eventName"></v-toolbar-title>
       <div class="flex-grow-1"></div>
     </v-toolbar>
 
@@ -141,6 +141,7 @@
 
 <script>
 import { db } from '@/main'
+import Events from '../Events';
 export default {
   data: () => ({
     today: new Date().toISOString().substr(0, 10),
@@ -152,7 +153,7 @@ export default {
       day: 'Day',
       '4day': '4 Days',
     },
-    name: null,
+    eventName: null,
     details: null,
     start: null,
     end: null,
@@ -166,8 +167,17 @@ export default {
     dialogDate: false,
     types: ['Group', 'Private', 'Semi-private', 'Birthday party', 'Trail ride', 'Off-premise event']
   }),
-  mounted () {
-    this.getEvents()
+  // mounted () {
+  //   this.getEvents()
+  // },
+  async created(){
+    try{
+      this.events = await Events.getEvents()
+      console.log(this.events)
+    }catch(err){
+      this.error = err.message;
+      console.log(this.error)
+    }
   },
   computed: {
     title () {
@@ -201,16 +211,16 @@ export default {
     }
   },
   methods: {
-    async getEvents () {
-      let snapshot = await db.collection('calEvent').get()
-      const events = []
-      snapshot.forEach(doc => {
-        let appData = doc.data()
-        appData.id = doc.id
-        events.push(appData)
-      })
-      this.events = events
-    },
+    // async getEvents () {
+    //   let snapshot = await db.collection('calEvent').get()
+    //   const events = []
+    //   snapshot.forEach(doc => {
+    //     let appData = doc.data()
+    //     appData.id = doc.id
+    //     events.push(appData)
+    //   })
+    //   this.events = events
+    // },
     setDialogDate( { date }) {
       this.dialogDate = true
       this.focus = date
@@ -229,7 +239,7 @@ export default {
       this.$refs.calendar.next()
     },
     async addEvent () {
-      if (this.name && this.start && this.end) {
+      if (this.eventName && this.start && this.end) {
         // await db.collection("calEvent").add({
         //   name: this.name,
         //   types: this.type,
@@ -237,15 +247,15 @@ export default {
         //   start: this.start,
         //   end: this.end,
         //   color: this.color
-        console.log(`name: ${this.name},
-          types: ${this.type},
+        console.log(`name: ${this.eventName},
+          types: ${this.types},
           details: ${this.details},
           start: ${this.start},
           end: ${this.end},
           date: ${this.focus}`)        
         //)
         this.getEvents()
-        this.name = '',
+        this.eventName = '',
         this.type = '',
         this.details = '',
         this.start = '',
@@ -266,8 +276,8 @@ export default {
     },
     async deleteEvent (ev) {
       await db.collection("calEvent").doc(ev).delete()
-      this.selectedOpen = false,
-      this.getEvents()
+      this.selectedOpen = false
+    //  this.getEvents()
     },
     showEvent ({ nativeEvent, event }) {
       const open = () => {
