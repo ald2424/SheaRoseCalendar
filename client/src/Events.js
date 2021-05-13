@@ -4,21 +4,6 @@ const url = 'http://localhost:5000/api/posts/';
 class Events {
     //get events
     static getEvents() {
-        // return new Promise(async (resolve, reject) => {
-        //     try {
-        //         const res = await axios.get(url);
-        //         const data = res.data;
-        //         resolve(
-        //             data.map(events => ({
-        //                 ...events
-        //             })),
-        //             console.log(`$From getEvents:
-        //             ${events}`)
-        //         );
-        //     } catch (err) {
-        //         reject(err)
-        //     }
-        // })
         return new Promise((resolve, reject) => {
             axios.get(url).then((res) => {
                 const data = res.data;
@@ -36,7 +21,7 @@ class Events {
     //create events
     static insertEvent(eventName, types, details, start, end, date){
         console.log(`From insertEvent:
-        event Name: ${eventName}
+        eventName: ${eventName}
         types: ${types}
         details: ${details}
         start: ${start}

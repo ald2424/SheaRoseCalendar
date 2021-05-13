@@ -41,28 +41,22 @@
           </v-menu>
         </v-toolbar>
       </v-sheet>
-
-      <v-dialog v-model="dialog" max-width="500">
-        <v-card>
-          <v-container>
-            <v-form @submit.prevent="addEvent">
-              <v-text-field v-model="eventName" type="text" label="Name (required)"></v-text-field>
-              <v-select :items="types" label="type (required)"></v-select>
-              <v-text-field v-model="details" type="text" label="detail"></v-text-field>
-              <v-text-field v-model="start" type="time" label="start (required)"></v-text-field>
-              <v-text-field v-model="end" type="time" label="end (required)"></v-text-field>
-              <v-btn type="submit" color="red darken-2" class="mr-4" @click.stop="dialog = false">
-                create event
-              </v-btn>
-            </v-form>
-          </v-container>
-        </v-card>
-      </v-dialog>
-
       <v-dialog v-model="dialogDate" max-width="500">
         <v-card>
           <v-container>
-            <v-form @submit.prevent="addEvent">
+             <b-modal
+            @submit.prevent="addEvent"
+            v-if="sameDayEvents.length > 0"
+            >
+              <!-- inside this modal, we'll add a card for each event for this date -->
+              <b-card>
+                <h1>Hello</h1>
+              </b-card>
+            </b-modal>
+            <v-form 
+            @submit.prevent="addEvent"
+            v-else
+            >
               <v-text-field v-model="eventName" type="text" label="event name (required)"></v-text-field>
               <v-select :items="types" label="type (required)"></v-select>
               <v-text-field v-model="details" type="text" label="detail"></v-text-field>
@@ -165,11 +159,9 @@ export default {
     events: [],
     dialog: false,
     dialogDate: false,
-    types: ['Group', 'Private', 'Semi-private', 'Birthday party', 'Trail ride', 'Off-premise event']
+    types: ['Group', 'Private', 'Semi-private', 'Birthday party', 'Trail ride', 'Off-premise event'],
+    sameDayEvents: [],
   }),
-  // mounted () {
-  //   this.getEvents()
-  // },
   async created(){
     try{
       this.events = await Events.getEvents()
@@ -211,19 +203,20 @@ export default {
     }
   },
   methods: {
-    // async getEvents () {
-    //   let snapshot = await db.collection('calEvent').get()
-    //   const events = []
-    //   snapshot.forEach(doc => {
-    //     let appData = doc.data()
-    //     appData.id = doc.id
-    //     events.push(appData)
-    //   })
-    //   this.events = events
-    // },
+    getEventsOnThisDate(){
+      this.events.forEach(element => {
+        if (element.date == this.focus){
+          console.log(`element.eventName: ${element.eventName}`)
+          this.sameDayEvents.push(element)
+          console.log(`sameDayEvents: ${this.sameDayEvents}`)
+        }
+      });
+    },
     setDialogDate( { date }) {
+      this.sameDayEvents = []
       this.dialogDate = true
       this.focus = date
+      this.getEventsOnThisDate()
     },
     viewDay ({ date }) {
       this.focus = date
@@ -240,21 +233,21 @@ export default {
     },
     async addEvent () {
       if (this.eventName && this.start && this.end) {
-        // await db.collection("calEvent").add({
-        //   name: this.name,
-        //   types: this.type,
-        //   details: this.details,
-        //   start: this.start,
-        //   end: this.end,
-        //   color: this.color
+        await Events.insertEvent(
+          this.eventName,
+          this.type,
+          this.details,
+          this.start,
+          this.end,
+         this.focus
+        )
         console.log(`name: ${this.eventName},
           types: ${this.types},
           details: ${this.details},
           start: ${this.start},
           end: ${this.end},
           date: ${this.focus}`)        
-        //)
-        this.getEvents()
+
         this.eventName = '',
         this.type = '',
         this.details = '',
