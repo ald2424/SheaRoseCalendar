@@ -17,7 +17,24 @@ class Events {
                 reject(err);
             })
         })
-}
+    }
+    //get events for a specific day
+    static getDayEvents(date) {
+        return new Promise((resolve, reject) => {
+            axios.get(`${url}${date}`,{params: {date}} ).then((res) => {
+                const data = res.data;
+                console.log(res.data)
+                resolve(
+                    data.map(e => ({
+                        ...e
+                    }))
+                );
+            })
+            .catch((err) =>{
+                reject(err);
+            })
+        })
+    }
     //create events
     static insertEvent(eventName, types, details, start, end, date){
         console.log(`From insertEvent:

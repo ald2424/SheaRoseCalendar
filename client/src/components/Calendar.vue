@@ -49,9 +49,7 @@
             v-if="sameDayEvents.length > 0"
             >
               <!-- inside this modal, we'll add a card for each event for this date -->
-              <b-card>
-                <h1>Hello</h1>
-              </b-card>
+              <DayEvents :date="focus"></DayEvents>
             </b-modal>
             <v-form 
             @submit.prevent="addEvent"
@@ -61,7 +59,9 @@
               <v-select :items="types" label="type (required)"></v-select>
               <v-text-field v-model="details" type="text" label="detail"></v-text-field>
               <v-text-field v-model="start" type="time" label="start (required)"></v-text-field>
+              <!-- <vue-timepicker v-model="start" format="h:m a" :minute-interval="15" placeholder="Start Time"></vue-timepicker> -->
               <v-text-field v-model="end" type="time" label="end (required)"></v-text-field>
+              <!-- <vue-timepicker v-model="end" format="h:m a" :minute-interval="15" placeholder="End Time"></vue-timepicker> -->
               <v-btn type="submit" color="red darken-2" class="mr-4" @click.stop="dialog = false">
                 create event
               </v-btn>
@@ -136,6 +136,9 @@
 <script>
 import { db } from '@/main'
 import Events from '../Events';
+import DayEvents from './EventsOfTheDay';
+// import VueTimepicker from 'vue2-timepicker';
+// import 'vue2-timepicker/dist/VueTimepicker.css'
 export default {
   data: () => ({
     today: new Date().toISOString().substr(0, 10),
@@ -162,6 +165,7 @@ export default {
     types: ['Group', 'Private', 'Semi-private', 'Birthday party', 'Trail ride', 'Off-premise event'],
     sameDayEvents: [],
   }),
+   components: { DayEvents },
   async created(){
     try{
       this.events = await Events.getEvents()

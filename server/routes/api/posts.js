@@ -10,6 +10,11 @@ router.get('/',  async (req, res) => {
     res.send(await posts.find({}).toArray());
 });
 
+router.get('/:date',  async (req, res) => {
+    const posts = await loadPostsCollection();
+    res.send(await posts.find({date: req.params.date}).toArray());
+});
+
 //Add Post
 router.post('/', async (req, res) =>{
     const posts = await loadPostsCollection();
