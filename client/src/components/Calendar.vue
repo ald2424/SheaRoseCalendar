@@ -44,28 +44,8 @@
       <v-dialog v-model="dialogDate" max-width="500">
         <v-card>
           <v-container>
-             <b-modal
-            @submit.prevent="addEvent"
-            v-if="sameDayEvents.length > 0"
-            >
-              <!-- inside this modal, we'll add a card for each event for this date -->
-              <DayEvents :date="focus"></DayEvents>
-            </b-modal>
-            <v-form 
-            @submit.prevent="addEvent"
-            v-else
-            >
-              <v-text-field v-model="eventName" type="text" label="event name (required)"></v-text-field>
-              <v-select :items="types" label="type (required)"></v-select>
-              <v-text-field v-model="details" type="text" label="detail"></v-text-field>
-              <v-text-field v-model="start" type="time" label="start (required)"></v-text-field>
-              <!-- <vue-timepicker v-model="start" format="h:m a" :minute-interval="15" placeholder="Start Time"></vue-timepicker> -->
-              <v-text-field v-model="end" type="time" label="end (required)"></v-text-field>
-              <!-- <vue-timepicker v-model="end" format="h:m a" :minute-interval="15" placeholder="End Time"></vue-timepicker> -->
-              <v-btn type="submit" color="red darken-2" class="mr-4" @click.stop="dialog = false">
-                create event
-              </v-btn>
-            </v-form>
+            <DayEvents v-if="showDayEvents" :date="focus"></DayEvents>
+            <CreateEvent v-else-if="showCreateEvent" :date="focus"></CreateEvent>
           </v-container>
         </v-card>
       </v-dialog>
@@ -137,6 +117,7 @@
 import { db } from '@/main'
 import Events from '../Events';
 import DayEvents from './EventsOfTheDay';
+import CreateEvent from './CreateEvent';
 // import VueTimepicker from 'vue2-timepicker';
 // import 'vue2-timepicker/dist/VueTimepicker.css'
 export default {
@@ -150,10 +131,10 @@ export default {
       day: 'Day',
       '4day': '4 Days',
     },
-    eventName: null,
-    details: null,
-    start: null,
-    end: null,
+    // eventName: null,
+    // details: null,
+    // start: null,
+    // end: null,
     //color: '#1976D2', // default event color
     currentlyEditing: null,
     selectedEvent: {},
@@ -162,10 +143,11 @@ export default {
     events: [],
     dialog: false,
     dialogDate: false,
-    types: ['Group', 'Private', 'Semi-private', 'Birthday party', 'Trail ride', 'Off-premise event'],
+    // types: ['Group', 'Private', 'Semi-private', 'Birthday party', 'Trail ride', 'Off-premise event'],
     sameDayEvents: [],
+    selectedDate: null
   }),
-   components: { DayEvents },
+   components: { DayEvents, CreateEvent },
   async created(){
     try{
       this.events = await Events.getEvents()
@@ -176,6 +158,22 @@ export default {
     }
   },
   computed: {
+    showDayEvents(){
+      if(this.sameDayEvents.length > 0 && this.dialogDate == true){
+        return true;
+        }
+        else{
+          return false;
+        }
+    },
+    showCreateEvent(){
+      if(this.sameDayEvents.length == 0 && this.dialogDate == true){
+        return true;
+        }
+        else{
+          return false;
+        }
+    },
     title () {
       const { start, end } = this
       if (!start || !end) {
@@ -235,32 +233,32 @@ export default {
     next () {
       this.$refs.calendar.next()
     },
-    async addEvent () {
-      if (this.eventName && this.start && this.end) {
-        await Events.insertEvent(
-          this.eventName,
-          this.type,
-          this.details,
-          this.start,
-          this.end,
-         this.focus
-        )
-        console.log(`name: ${this.eventName},
-          types: ${this.types},
-          details: ${this.details},
-          start: ${this.start},
-          end: ${this.end},
-          date: ${this.focus}`)        
+    // async addEvent () {
+    //   if (this.eventName && this.start && this.end) {
+    //     await Events.insertEvent(
+    //       this.eventName,
+    //       this.type,
+    //       this.details,
+    //       this.start,
+    //       this.end,
+    //      this.focus
+    //     )
+    //     console.log(`name: ${this.eventName},
+    //       types: ${this.types},
+    //       details: ${this.details},
+    //       start: ${this.start},
+    //       end: ${this.end},
+    //       date: ${this.focus}`)        
 
-        this.eventName = '',
-        this.type = '',
-        this.details = '',
-        this.start = '',
-        this.end = ''
-      } else {
-        alert('You must enter event name, start, and end time')
-      }
-    },
+    //     this.eventName = '',
+    //     this.type = '',
+    //     this.details = '',
+    //     this.start = '',
+    //     this.end = ''
+    //   } else {
+    //     alert('You must enter event name, start, and end time')
+    //   }
+    // },
     editEvent (ev) {
       this.currentlyEditing = ev.id
     },
