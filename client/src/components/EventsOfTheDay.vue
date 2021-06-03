@@ -29,6 +29,7 @@
 <!-- 
     Create a 'create event' button to load createEvent component.  Then come back to this component on close
  -->
+ <button>Create New Event</button>
   </b-modal>
 </template>
 <script>

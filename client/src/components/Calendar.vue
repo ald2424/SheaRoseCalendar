@@ -45,17 +45,17 @@
         <v-card>
           <v-container>
             <DayEvents v-if="showDayEvents" :date="focus"></DayEvents>
-            <CreateEvent v-else-if="showCreateEvent" :date="focus"></CreateEvent>
+            <CreateEvent v-else-if="showCreateEvent" :date="focus" @close="saveEvent"></CreateEvent>
           </v-container>
         </v-card>
       </v-dialog>
 
 <v-sheet height="600">
+  <!-- took out this line from v-calendar: :events="events" -->
   <v-calendar
   ref="calendar"
   v-model="focus"
   color="red darken-2"
-  :events="events"
   :event-margin-bottom="3"
   :now="today"
   :type="type"
@@ -205,6 +205,9 @@ export default {
     }
   },
   methods: {
+    saveEvent(){
+      this.dialogDate = false;
+    },
     getEventsOnThisDate(){
       this.events.forEach(element => {
         if (element.date == this.focus){
@@ -228,9 +231,11 @@ export default {
       this.focus = this.today
     },
     prev () {
+      console.log("PREVIOUS")
       this.$refs.calendar.prev()
     },
     next () {
+      console.log("NEXT")
       this.$refs.calendar.next()
     },
     // async addEvent () {

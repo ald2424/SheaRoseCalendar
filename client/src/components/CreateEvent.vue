@@ -39,30 +39,32 @@ export default {
   methods: {
     async addEvent() {
       if (this.eventName && this.start && this.end) {
+        
+        let fullDateStart = this.date + " " + this.start
+        let fullDateEnd = this.date + " " + this.end
+
         await Events.insertEvent(
           this.eventName,
           this.type,
           this.details,
-          this.start,
-          this.end,
+          fullDateStart,
+          fullDateEnd,
           this.date
         );
-        console.log(`name: ${this.eventName},
-          type: ${this.type},
-          details: ${this.details},
-          start: ${this.start},
-          end: ${this.end},
-          date: ${this.date}`);
+        this.eventName = "";
+        this.type = "";
+        this.details = "";
+        this.start = "";
+        this.end = "";
 
-        (this.eventName = ""),
-          (this.type = ""),
-          (this.details = ""),
-          (this.start = ""),
-          (this.end = "");
-      } else {
-        alert("You must enter event name, start, and end time");
-      }
+       this.saveEvent();
+     } else {
+       alert("You must enter event name, start, and end time");
+     }
+    },
+    saveEvent(){
+        this.$emit('close');
     }
-  }
+  },
 };
 </script>
