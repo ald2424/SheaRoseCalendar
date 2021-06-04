@@ -29,11 +29,14 @@
 <!-- 
     Create a 'create event' button to load createEvent component.  Then come back to this component on close
  -->
- <button>Create New Event</button>
+ <button @click="newEvent()">Create New Event</button>
+ <CreateEvent v-if="showCreateEvent" :date="date" @close="saveEvent"></CreateEvent>
+ 
   </b-modal>
 </template>
 <script>
 import Events from "../Events";
+import CreateEvent from "./CreateEvent";
 export default {
   name: "DayEvents",
   props: {
@@ -43,9 +46,26 @@ export default {
     },
     eventsOnThisDay: []
   },
-
+  data(){
+      return{
+          showCreateEvent: false,
+      }
+  },
+  components: {CreateEvent},
   async created() {
-    this.eventsOnThisDay = await Events.getDayEvents(this.date);
+      this.getEvents();
+  },
+  methods:{
+      async getEvents(){
+        this.eventsOnThisDay = await Events.getDayEvents(this.date);
+      },
+      newEvent(){
+          this.showCreateEvent = true;
+      },
+      saveEvent(){
+          this.showCreateEvent = false;
+          this.getEvents();
+      }
   }
 };
 </script>

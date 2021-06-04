@@ -149,13 +149,7 @@ export default {
   }),
    components: { DayEvents, CreateEvent },
   async created(){
-    try{
-      this.events = await Events.getEvents()
-      console.log(this.events)
-    }catch(err){
-      this.error = err.message;
-      console.log(this.error)
-    }
+    this.getEvents();
   },
   computed: {
     showDayEvents(){
@@ -205,8 +199,18 @@ export default {
     }
   },
   methods: {
+    async getEvents(){
+      try{
+      this.events = await Events.getEvents()
+      console.log(this.events)
+    }catch(err){
+      this.error = err.message;
+      console.log(this.error)
+    }
+    },
     saveEvent(){
       this.dialogDate = false;
+      this.getEvents();
     },
     getEventsOnThisDate(){
       this.events.forEach(element => {
