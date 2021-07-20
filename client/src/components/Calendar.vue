@@ -50,8 +50,7 @@
         </v-card>
       </v-dialog>
 
-<v-sheet height="600">
-  <!-- took out this line from v-calendar: :events="events" -->
+<v-sheet height="1000">
   <v-calendar
   ref="calendar"
   v-model="focus"
@@ -59,11 +58,17 @@
   :event-margin-bottom="3"
   :now="today"
   :type="type"
+  :events="events"
+  event-color="red darken-2"
   @click:event="showEvent"
   @click:more="viewDay"
   @click:date="setDialogDate"
   @change="updateRange"
-  ></v-calendar>
+  >
+       <template v-slot:event="{ event }">
+        {{ event.eventName }}
+    </template>
+  </v-calendar>
   <v-menu
   v-model="selectedOpen"
   :close-on-content-click="false"
