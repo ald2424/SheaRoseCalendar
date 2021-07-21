@@ -66,7 +66,7 @@
   @change="updateRange"
   >
        <template v-slot:event="{ event }">
-        {{ event.eventName }}
+        {{ event.types }}
     </template>
   </v-calendar>
   <v-menu
@@ -81,7 +81,7 @@
       <v-btn @click="deleteEvent(selectedEvent.id)" icon>
         <v-icon>mdi-delete</v-icon>
       </v-btn>
-      <v-toolbar-title v-html="selectedEvent.eventName"></v-toolbar-title>
+      <v-toolbar-title v-html="selectedEvent.types"></v-toolbar-title>
       <div class="flex-grow-1"></div>
     </v-toolbar>
 
@@ -136,7 +136,7 @@ export default {
       day: 'Day',
       '4day': '4 Days',
     },
-    // eventName: null,
+  
     // details: null,
     // start: null,
     // end: null,
@@ -220,7 +220,6 @@ export default {
     getEventsOnThisDate(){
       this.events.forEach(element => {
         if (element.date == this.focus){
-          console.log(`element.eventName: ${element.eventName}`)
           this.sameDayEvents.push(element)
           console.log(`sameDayEvents: ${this.sameDayEvents}`)
         }
@@ -248,23 +247,20 @@ export default {
       this.$refs.calendar.next()
     },
     // async addEvent () {
-    //   if (this.eventName && this.start && this.end) {
+    //   if (this.start && this.end) {
     //     await Events.insertEvent(
-    //       this.eventName,
     //       this.type,
     //       this.details,
     //       this.start,
     //       this.end,
     //      this.focus
     //     )
-    //     console.log(`name: ${this.eventName},
     //       types: ${this.types},
     //       details: ${this.details},
     //       start: ${this.start},
     //       end: ${this.end},
     //       date: ${this.focus}`)        
 
-    //     this.eventName = '',
     //     this.type = '',
     //     this.details = '',
     //     this.start = '',

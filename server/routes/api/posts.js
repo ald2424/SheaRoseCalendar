@@ -19,12 +19,14 @@ router.get('/:date',  async (req, res) => {
 router.post('/', async (req, res) =>{
     const posts = await loadPostsCollection();
     await posts.insertOne({
-        eventName: req.body.eventName,
         types: req.body.types,
         details: req.body.details,
         start: req.body.start,
         end: req.body.end,
-        date: req.body.date
+        date: req.body.date,
+        instructor: req.body.instructor,
+        repeat: req.body.repeat
+        
     });
     //status 201 means everything worked and something was created
     res.status(201).send();

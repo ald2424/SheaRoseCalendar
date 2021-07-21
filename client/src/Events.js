@@ -36,21 +36,24 @@ class Events {
         })
     }
     //create events
-    static insertEvent(eventName, types, details, start, end, date){
+    static insertEvent(types, details, start, end, date, instructor, repeat){
         console.log(`From insertEvent:
-        eventName: ${eventName}
         types: ${types}
         details: ${details}
         start: ${start}
         end: ${end}
-        date: ${date}`)
+        date: ${date}
+        instructor: ${instructor}
+        repeat: ${repeat}`)
+    
         return axios.post(url, {
-        eventName,
         types,
         details,
         start,
         end,
-        date
+        date,
+        instructor,
+        repeat
         })
     }
     // delete events

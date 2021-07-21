@@ -20,6 +20,7 @@
                   </div>
                   <div class="tracking-date"><span>{{event.start}}-{{event.end}}</span></div>
                   <div class="tracking-content">{{event.types}}<span>{{event.details}}</span></div>
+                  <div class="tracking-content">{{event.instructor}}<span>{{event.repeat}}</span></div>
                </div>
             </div>
          </div>
