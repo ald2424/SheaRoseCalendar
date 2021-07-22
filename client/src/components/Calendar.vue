@@ -12,10 +12,10 @@
           <v-btn fab text small @click="prev">
             <v-icon small>mdi-chevron-left</v-icon>
           </v-btn>
+          <v-toolbar-title>{{ title }}</v-toolbar-title>
           <v-btn fab text small @click="next">
             <v-icon small>mdi-chevron-right</v-icon>
           </v-btn>
-          <v-toolbar-title>{{ title }}</v-toolbar-title>
           <div class="flex-grow-1"></div>
           <v-menu bottom right>
             <template v-slot:activator="{ on }">
@@ -138,8 +138,8 @@ export default {
     },
   
     // details: null,
-    // start: null,
-    // end: null,
+     start: null,
+     end: null,
     //color: '#1976D2', // default event color
     currentlyEditing: null,
     selectedEvent: {},
@@ -174,6 +174,7 @@ export default {
         }
     },
     title () {
+      console.log(this)
       const { start, end } = this
       if (!start || !end) {
         return ''
@@ -207,12 +208,36 @@ export default {
     async getEvents(){
       try{
       this.events = await Events.getEvents()
-      console.log(this.events)
+      this.events.forEach(event =>{
+        if(event.repeat == true){
+         // this.repeatEvent(event)
+        }
+      })
     }catch(err){
       this.error = err.message;
       console.log(this.error)
     }
     },
+    //repeatEvent(event){
+    //  try{
+     // let today = new Date();
+      //let weeklyEvent = [];
+      //let newEvent = {...event};
+    // while(today < event.repeatUntil){
+    //  let newDate = event.start.slice(0,10);
+    //   let newDate = event.start
+    //  let x = new Date(newDate);
+    //  x = x.setDate(x.getDate() + 7);
+    //  let y = new Date(x)
+    //  let t = y.toLocaleString()
+    //  t = t.replace(',', '')
+
+    //console.log("hi");
+    //  }
+    //   }catch(err){
+    //     console.log(err.message)
+    //   }
+    // },
     saveEvent(){
       this.dialogDate = false;
       this.getEvents();

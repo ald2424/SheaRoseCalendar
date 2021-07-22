@@ -21,11 +21,14 @@ router.post('/', async (req, res) =>{
     await posts.insertOne({
         types: req.body.types,
         details: req.body.details,
-        start: req.body.start,
-        end: req.body.end,
+        startTime: req.body.startTime,
+        endTime: req.body.endTime,
         date: req.body.date,
         instructor: req.body.instructor,
-        repeat: req.body.repeat
+        repeat: req.body.repeat,
+        repeatUntil: req.body.repeatUntil,
+        start: req.body.start,
+        end: req.body.end
         
     });
     //status 201 means everything worked and something was created
