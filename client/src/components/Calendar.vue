@@ -210,7 +210,7 @@ export default {
       this.events = await Events.getEvents()
       this.events.forEach(event =>{
         if(event.repeat == true){
-         // this.repeatEvent(event)
+          this.repeatEvent(event)
         }
       })
     }catch(err){
@@ -218,26 +218,32 @@ export default {
       console.log(this.error)
     }
     },
-    //repeatEvent(event){
-    //  try{
-     // let today = new Date();
-      //let weeklyEvent = [];
+    repeatEvent(event){
+     // let weeklyEvent = [];
       //let newEvent = {...event};
-    // while(today < event.repeatUntil){
-    //  let newDate = event.start.slice(0,10);
-    //   let newDate = event.start
-    //  let x = new Date(newDate);
-    //  x = x.setDate(x.getDate() + 7);
-    //  let y = new Date(x)
-    //  let t = y.toLocaleString()
-    //  t = t.replace(',', '')
+      let today = new Date().toLocaleDateString("en-CA");
+      let newDate = event.start.slice(0,10);
 
-    //console.log("hi");
-    //  }
-    //   }catch(err){
-    //     console.log(err.message)
-    //   }
-    // },
+      if(today < event.repeatUntil){
+        //get the week before the repeatUntil date
+        event.repeatUntil = new Date(event.repeatUntil)
+        event.repeatUntil = event.repeatUntil.setDate(event.repeatUntil.getDate() - 7);
+      
+       while(new Date(newDate) <= new Date(event.repeatUntil)){
+          let x = new Date(newDate);
+          newDate = x.setDate(x.getDate() + 7);
+          newDate = new Date(newDate).toLocaleDateString("en-CA").slice(0,10).replace(',', '');
+          //console.log(newDate)
+          //change the event.start date in the newEvent array to add to this.events
+          let newEvent = {...event};
+          newEvent.date = newDate;
+          newEvent.start = newDate + " " + event.startTime;
+          newEvent.end = newDate + " " + event.endTime;
+          this.events.push(newEvent)
+        }
+        //console.log(weeklyEvent)
+      }
+     },
     saveEvent(){
       this.dialogDate = false;
       this.getEvents();
