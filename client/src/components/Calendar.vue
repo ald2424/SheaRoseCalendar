@@ -231,7 +231,9 @@ export default {
       
        while(new Date(newDate) <= new Date(event.repeatUntil)){
           let x = new Date(newDate);
-          newDate = x.setDate(x.getDate() + 7);
+          console.log(`233: ${newDate}`)
+          newDate = x.setDate(x.getDate() + 8);
+          console.log(`235: ${newDate}`)
           newDate = new Date(newDate).toLocaleDateString("en-CA").slice(0,10).replace(',', '');
           //console.log(newDate)
           //change the event.start date in the newEvent array to add to this.events
