@@ -54,7 +54,6 @@
   <v-calendar
   ref="calendar"
   v-model="focus"
-  color="red darken-2"
   :event-margin-bottom="3"
   :now="today"
   :type="type"
@@ -127,8 +126,8 @@ import CreateEvent from './CreateEvent';
 // import 'vue2-timepicker/dist/VueTimepicker.css'
 export default {
   data: () => ({
-    today: new Date().toISOString().substr(0, 10),
-    focus: new Date().toISOString().substr(0, 10),
+    today: new Date().toLocaleDateString('fr-ca'),
+    focus: new Date().toLocaleDateString('fr-ca'),
     type: 'month',
     typeToLabel: {
       month: 'Month',
@@ -154,7 +153,7 @@ export default {
   }),
    components: { DayEvents, CreateEvent },
   async created(){
-    this.getEvents();
+   this.getEvents();
   },
   computed: {
     showDayEvents(){
@@ -221,19 +220,17 @@ export default {
     repeatEvent(event){
      // let weeklyEvent = [];
       //let newEvent = {...event};
-      let today = new Date().toLocaleDateString("en-CA");
+      let t = new Date().toLocaleDateString("en-CA");
       let newDate = event.start.slice(0,10);
 
-      if(today < event.repeatUntil){
+      if(t < event.repeatUntil){
         //get the week before the repeatUntil date
         event.repeatUntil = new Date(event.repeatUntil)
         event.repeatUntil = event.repeatUntil.setDate(event.repeatUntil.getDate() - 7);
       
        while(new Date(newDate) <= new Date(event.repeatUntil)){
           let x = new Date(newDate);
-          console.log(`233: ${newDate}`)
           newDate = x.setDate(x.getDate() + 8);
-          console.log(`235: ${newDate}`)
           newDate = new Date(newDate).toLocaleDateString("en-CA").slice(0,10).replace(',', '');
           //console.log(newDate)
           //change the event.start date in the newEvent array to add to this.events
