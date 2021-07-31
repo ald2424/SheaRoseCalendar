@@ -77,7 +77,7 @@
   >
   <v-card color="grey lighten-4" :width="350" flat>
     <v-toolbar :color="selectedEvent.color" dark>
-      <v-btn @click="deleteEvent(selectedEvent.id)" icon>
+      <v-btn @click="deleteEvent(selectedEvent._id)" icon>
         <v-icon>mdi-delete</v-icon>
       </v-btn>
       <v-toolbar-title v-html="selectedEvent.types"></v-toolbar-title>
@@ -310,9 +310,10 @@ export default {
       this.currentlyEditing = null
     },
     async deleteEvent (ev) {
-      await db.collection("calEvent").doc(ev).delete()
+      console.log("ev: " + ev)
+     await Events.deleteEvent(ev)
       this.selectedOpen = false
-    //  this.getEvents()
+     this.getEvents()
     },
     showEvent ({ nativeEvent, event }) {
       const open = () => {
