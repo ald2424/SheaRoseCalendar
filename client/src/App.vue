@@ -6,7 +6,7 @@
       dark
     >
       <div class="d-flex justify-center">
-        <v-toolbar-title>Shea Rose Farm Calendar</v-toolbar-title>
+        <v-toolbar-title>Shea Rose Farm Planner</v-toolbar-title>
       </div>
     </v-app-bar>
 

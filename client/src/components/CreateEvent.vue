@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="addEvent">
     <v-select :items="types" v-model="type" label="type (required)"></v-select>
-    <v-text-field v-model="details" type="text" label="detail"></v-text-field>
+    <v-text-field v-if="type !== 'Private'" v-model="details" type="number" label="How many horses?"></v-text-field>
     <v-text-field v-model="startTime" type="time" label="start (required)"></v-text-field>
     <!-- <vue-timepicker v-model="start" format="h:m a" :minute-interval="15" placeholder="Start Time"></vue-timepicker> -->
     <v-text-field v-model="endTime" type="time" label="end (required)"></v-text-field>
@@ -48,10 +48,15 @@ export default {
         
         let fullDateStart = this.date + " " + this.startTime
         let fullDateEnd = this.date + " " + this.endTime
-
+        let ofDetails
+        if(this.details !== null){
+         ofDetails = "of " + this.details
+        }else{
+          ofDetails = this.details
+        }
         await Events.insertEvent(
           this.type,
-          this.details,
+          ofDetails,
          // fullDateStart,
          // fullDateEnd,
          this.startTime,

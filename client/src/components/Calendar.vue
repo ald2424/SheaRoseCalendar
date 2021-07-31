@@ -54,7 +54,6 @@
   <v-calendar
   ref="calendar"
   v-model="focus"
-  :event-margin-bottom="3"
   :now="today"
   :type="type"
   :events="events"
@@ -64,9 +63,10 @@
   @click:date="setDialogDate"
   @change="updateRange"
   >
-       <template v-slot:event="{ event }">
-        {{ event.types }}
-    </template>
+      <template v-slot:event="{ event }">
+        {{event.types}} {{event.details}}
+      </template>
+    
   </v-calendar>
   <v-menu
   v-model="selectedOpen"
@@ -85,7 +85,7 @@
     </v-toolbar>
 
     <v-card-text>
-      <form v-if="currentlyEditing !== selectedEvent.id">
+      <form v-if="currentlyEditing !== selectedEvent._id">
         {{ selectedEvent.details }}
       </form>
       <form v-else>
@@ -99,17 +99,17 @@
     </form>
   </v-card-text>
 
-  <v-card-actions>
+  <!-- <v-card-actions>
     <v-btn text color="secondary" @click="selectedOpen = false">
       close
     </v-btn>
-    <v-btn v-if="currentlyEditing !== selectedEvent.id" text @click.prevent="editEvent(selectedEvent)">
+    <v-btn v-if="currentlyEditing !== selectedEvent._id" text @click.prevent="editEvent(selectedEvent)">
       edit
     </v-btn>
     <v-btn text v-else type="submit" @click.prevent="updateEvent(selectedEvent)">
       Save
     </v-btn>
-  </v-card-actions>
+  </v-card-actions> -->
 </v-card>
 </v-menu>
 </v-sheet>
@@ -300,7 +300,7 @@ export default {
     //   }
     // },
     editEvent (ev) {
-      this.currentlyEditing = ev.id
+      this.currentlyEditing = ev._id
     },
     async updateEvent (ev) {
       await db.collection('calEvent').doc(this.currentlyEditing).update({
