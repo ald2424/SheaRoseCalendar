@@ -136,7 +136,6 @@ export default {
       '4day': '4 Days',
     },
   
-    // details: null,
      start: null,
      end: null,
     //color: '#1976D2', // default event color
@@ -147,7 +146,6 @@ export default {
     events: [],
     dialog: false,
     dialogDate: false,
-    // types: ['Group', 'Private', 'Semi-private', 'Birthday party', 'Trail ride', 'Off-premise event'],
     sameDayEvents: [],
     selectedDate: null
   }),
@@ -207,42 +205,11 @@ export default {
     async getEvents(){
       try{
       this.events = await Events.getEvents()
-      this.events.forEach(event =>{
-        if(event.repeat == true){
-          this.repeatEvent(event)
-        }
-      })
     }catch(err){
       this.error = err.message;
       console.log(this.error)
     }
     },
-    repeatEvent(event){
-     // let weeklyEvent = [];
-      //let newEvent = {...event};
-      let t = new Date().toLocaleDateString("en-CA");
-      let newDate = event.start.slice(0,10);
-
-      if(t < event.repeatUntil){
-        //get the week before the repeatUntil date
-        event.repeatUntil = new Date(event.repeatUntil)
-        event.repeatUntil = event.repeatUntil.setDate(event.repeatUntil.getDate() - 7);
-      
-       while(new Date(newDate) <= new Date(event.repeatUntil)){
-          let x = new Date(newDate);
-          newDate = x.setDate(x.getDate() + 8);
-          newDate = new Date(newDate).toLocaleDateString("en-CA").slice(0,10).replace(',', '');
-          //console.log(newDate)
-          //change the event.start date in the newEvent array to add to this.events
-          let newEvent = {...event};
-          newEvent.date = newDate;
-          newEvent.start = newDate + " " + event.startTime;
-          newEvent.end = newDate + " " + event.endTime;
-          this.events.push(newEvent)
-        }
-        //console.log(weeklyEvent)
-      }
-     },
     saveEvent(){
       this.dialogDate = false;
       this.getEvents();
@@ -276,29 +243,6 @@ export default {
       console.log("NEXT")
       this.$refs.calendar.next()
     },
-    // async addEvent () {
-    //   if (this.start && this.end) {
-    //     await Events.insertEvent(
-    //       this.type,
-    //       this.details,
-    //       this.start,
-    //       this.end,
-    //      this.focus
-    //     )
-    //       types: ${this.types},
-    //       details: ${this.details},
-    //       start: ${this.start},
-    //       end: ${this.end},
-    //       date: ${this.focus}`)        
-
-    //     this.type = '',
-    //     this.details = '',
-    //     this.start = '',
-    //     this.end = ''
-    //   } else {
-    //     alert('You must enter event name, start, and end time')
-    //   }
-    // },
     editEvent (ev) {
       this.currentlyEditing = ev._id
     },

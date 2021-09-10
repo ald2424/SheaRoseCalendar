@@ -37,18 +37,6 @@ class Events {
     }
     //create events
     static insertEvent(types, details, startTime, endTime, date, instructor, repeat,repeatUntil, start, end){
-        console.log(`From insertEvent:
-        types: ${types}
-        details: ${details}
-        startTime: ${startTime}
-        endTime: ${endTime}
-        date: ${date}
-        instructor: ${instructor}
-        repeat: ${repeat}
-        repeatUntil: ${repeatUntil}
-        start: ${start}
-        end: ${end}`)
-    
         return axios.post(url, {
         types,
         details,
