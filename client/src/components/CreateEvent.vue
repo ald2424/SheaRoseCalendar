@@ -12,6 +12,7 @@
     <v-text-field v-model="endTime" type="time" label="end (required)"></v-text-field>
     <!-- <vue-timepicker v-model="end" format="h:m a" :minute-interval="15" placeholder="End Time"></vue-timepicker> -->
     <v-text-field v-model="instructor" type="text" label="instructor (required)"></v-text-field>
+    <v-textarea v-model="notes" label="Notes" autogrow rows="2"></v-textarea>
     <v-checkbox v-model="repeat" label="repeat every week"></v-checkbox>
     <v-text-field v-if="repeat == true" v-model="repeatUntil" type="date" label="repeat until"></v-text-field>
     <v-btn type="submit" color="red darken-2" class="mr-4" @click.stop="dialog = false">create event</v-btn>
@@ -50,6 +51,7 @@ export default {
     fullDateEnd: null,
     ofDetails: null,
     theDate: null,
+    notes: null,
   }),
   methods: {
     repeatEvent() {
@@ -111,7 +113,8 @@ export default {
         this.repeat,
         this.repeatUntil,
         this.fullDateStart,
-        this.fullDateEnd
+        this.fullDateEnd,
+        this.notes,
       );
       this.type = "";
       this.details = "";
@@ -120,6 +123,7 @@ export default {
       this.instructor = "";
       this.repeat = false;
       this.repeatUntil = "";
+      this.notes = "";
 
       this.saveEvent();
     },

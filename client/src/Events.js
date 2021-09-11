@@ -36,7 +36,7 @@ class Events {
         })
     }
     //create events
-    static insertEvent(types, details, startTime, endTime, date, instructor, repeat,repeatUntil, start, end){
+    static insertEvent(types, details, startTime, endTime, date, instructor, repeat,repeatUntil, start, end, notes){
         return axios.post(url, {
         types,
         details,
@@ -47,7 +47,8 @@ class Events {
         repeat,
         repeatUntil,
         start,
-        end
+        end,
+        notes
         })
     }
     // delete events

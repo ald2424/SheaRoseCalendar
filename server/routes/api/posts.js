@@ -28,7 +28,8 @@ router.post('/', async (req, res) =>{
         repeat: req.body.repeat,
         repeatUntil: req.body.repeatUntil,
         start: req.body.start,
-        end: req.body.end
+        end: req.body.end,
+        notes: req.body.notes
         
     });
     //status 201 means everything worked and something was created
