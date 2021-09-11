@@ -41,11 +41,12 @@
           </v-menu>
         </v-toolbar>
       </v-sheet>
-      <v-dialog v-model="dialogDate" max-width="500">
+      <v-dialog max-width="500">
         <v-card>
           <v-container>
-            <DayEvents v-if="showDayEvents" :date="focus"></DayEvents>
-            <CreateEvent v-else-if="showCreateEvent" :date="focus" @close="saveEvent"></CreateEvent>
+            <!-- <DayEvents v-if="showDayEvents" :date="focus"></DayEvents> -->
+            <!-- <CreateEvent v-else-if="showCreateEvent" :date="focus" @close="saveEvent"></CreateEvent> -->
+            <CreateEvent v-if="showCreateEvent" :date="focus" @close="saveEvent"></CreateEvent>
           </v-container>
         </v-card>
       </v-dialog>
@@ -80,13 +81,13 @@
       <v-btn @click="deleteEvent(selectedEvent._id)" icon>
         <v-icon>mdi-delete</v-icon>
       </v-btn>
-      <v-toolbar-title v-html="selectedEvent.types"></v-toolbar-title>
+      <v-toolbar-title v-html="selectedEvent.types + ' ' + selectedEvent.details"></v-toolbar-title>
       <div class="flex-grow-1"></div>
     </v-toolbar>
 
     <v-card-text>
       <form v-if="currentlyEditing !== selectedEvent._id">
-        {{ selectedEvent.details }}
+        {{selectedEvent.notes}}
       </form>
       <form v-else>
         <textarea-autosize
@@ -120,7 +121,7 @@
 <script>
 import { db } from '@/main'
 import Events from '../Events';
-import DayEvents from './EventsOfTheDay';
+//import DayEvents from './EventsOfTheDay';
 import CreateEvent from './CreateEvent';
 // import VueTimepicker from 'vue2-timepicker';
 // import 'vue2-timepicker/dist/VueTimepicker.css'
@@ -149,7 +150,7 @@ export default {
     sameDayEvents: [],
     selectedDate: null
   }),
-   components: { DayEvents, CreateEvent },
+   components: { CreateEvent },
   async created(){
    this.getEvents();
   },
@@ -171,7 +172,6 @@ export default {
         }
     },
     title () {
-      console.log(this)
       const { start, end } = this
       if (!start || !end) {
         return ''
@@ -207,7 +207,6 @@ export default {
       this.events = await Events.getEvents()
     }catch(err){
       this.error = err.message;
-      console.log(this.error)
     }
     },
     saveEvent(){
@@ -218,7 +217,6 @@ export default {
       this.events.forEach(element => {
         if (element.date == this.focus){
           this.sameDayEvents.push(element)
-          console.log(`sameDayEvents: ${this.sameDayEvents}`)
         }
       });
     },
@@ -226,7 +224,8 @@ export default {
       this.sameDayEvents = []
       this.dialogDate = true
       this.focus = date
-      this.getEventsOnThisDate()
+      this.type = 'day'
+      //this.getEventsOnThisDate()
     },
     viewDay ({ date }) {
       this.focus = date
@@ -236,11 +235,9 @@ export default {
       this.focus = this.today
     },
     prev () {
-      console.log("PREVIOUS")
       this.$refs.calendar.prev()
     },
     next () {
-      console.log("NEXT")
       this.$refs.calendar.next()
     },
     editEvent (ev) {
@@ -254,7 +251,6 @@ export default {
       this.currentlyEditing = null
     },
     async deleteEvent (ev) {
-      console.log("ev: " + ev)
      await Events.deleteEvent(ev)
       this.selectedOpen = false
      this.getEvents()
@@ -284,6 +280,14 @@ export default {
     }
   },
   watch:{
+    events: function(val){
+      val.forEach(event =>{
+        console.log(event.details)
+        if(event.details == null){
+          event.details = "";
+        }
+      })
+    },
     end(){
       const that = this
       setTimeout(function(){
