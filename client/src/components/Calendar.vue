@@ -156,23 +156,6 @@ export default {
    this.getEvents();
   },
   computed: {
-    // showDayEvents(){
-    //   if(this.sameDayEvents.length > 0 && this.dialogDate == true){
-    //     return true;
-    //     }
-    //     else{
-    //       return false;
-    //     }
-    // },
-    showCreateEvent(){
-      console.log("this.focus: " + this.focus)
-      if(this.sameDayEvents.length == 0 && this.dialogDate == true){
-        return true;
-        }
-        else{
-          return false;
-        }
-    },
     title () {
       const { start, end } = this
       if (!start || !end) {
@@ -211,8 +194,17 @@ export default {
       this.error = err.message;
     }
     },
-    saveEvent(){
+     showCreateEvent(){
+      if(this.dialogDate == true){
+        return true;
+        }
+        else{
+          return false;
+        }
+      },
+      saveEvent(){
       this.dialogDate = false;
+      this.dialog = false;
       this.getEvents();
     },
     getEventsOnThisDate(){
