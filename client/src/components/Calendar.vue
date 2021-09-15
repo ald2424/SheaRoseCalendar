@@ -41,7 +41,7 @@
           </v-menu>
         </v-toolbar>
       </v-sheet>
-      <v-dialog max-width="500">
+      <v-dialog v-model="dialog" max-width="500">
         <v-card>
           <v-container>
             <!-- <DayEvents v-if="showDayEvents" :date="focus"></DayEvents> -->
@@ -148,22 +148,24 @@ export default {
     dialog: false,
     dialogDate: false,
     sameDayEvents: [],
-    selectedDate: null
+    selectedDate: null,
+    dateForProp: null,
   }),
    components: { CreateEvent },
   async created(){
    this.getEvents();
   },
   computed: {
-    showDayEvents(){
-      if(this.sameDayEvents.length > 0 && this.dialogDate == true){
-        return true;
-        }
-        else{
-          return false;
-        }
-    },
+    // showDayEvents(){
+    //   if(this.sameDayEvents.length > 0 && this.dialogDate == true){
+    //     return true;
+    //     }
+    //     else{
+    //       return false;
+    //     }
+    // },
     showCreateEvent(){
+      console.log("this.focus: " + this.focus)
       if(this.sameDayEvents.length == 0 && this.dialogDate == true){
         return true;
         }
@@ -282,7 +284,6 @@ export default {
   watch:{
     events: function(val){
       val.forEach(event =>{
-        console.log(event.details)
         if(event.details == null){
           event.details = "";
         }
