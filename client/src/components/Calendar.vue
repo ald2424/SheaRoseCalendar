@@ -78,11 +78,14 @@
   >
   <v-card color="grey lighten-4" :width="350" flat>
     <v-toolbar :color="selectedEvent.color" dark>
-      <v-btn @click="deleteEvent(selectedEvent._id)" icon>
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
       <v-toolbar-title v-html="selectedEvent.types + ' ' + selectedEvent.details"></v-toolbar-title>
       <div class="flex-grow-1"></div>
+      <v-btn text small @click.stop="dialog = true" icon>
+        <v-icon>mdi-file-edit</v-icon>
+      </v-btn>
+      <v-btn text small  @click="deleteEvent(selectedEvent._id)" icon>
+        <v-icon>mdi-delete</v-icon>
+      </v-btn>
     </v-toolbar>
 
     <v-card-text>
